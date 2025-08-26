@@ -1,6 +1,6 @@
 from http.server import BaseHTTPRequestHandler
 import os, sys
-sys.path.append(os.path.dirname(__file__))  # ← ensure sibling imports work
+sys.path.append(os.path.dirname(__file__))  # ensure sibling imports work
 from _shared import fetch_soup, find_row_cells_across_tables, render_html
 
 URL = "https://www.cne-siar.gov.uk/bins-and-recycling/waste-recycling-collections-lewis-and-harris/organic-food-and-garden-waste-and-mixed-recycling-blue-bin/tuesday-collections"
@@ -32,23 +32,20 @@ class handler(BaseHTTPRequestHandler):
             self._send(200, html)
             return
 
-        # Build per-area sections with month sublists
-        area_sections = []
-        for area in TARGETS:
-            cells = found.get(area, [])
-            if cells:
-                month_blocks = []
-                for month, dates_str in zip(months, cells):
-                    dates = [d.strip() for d in dates_str.split(",") if d.strip()]
-                    lis = "\n".join(f'<li><i class="fas fa-calendar-day"></i> {d}</li>' for d in dates) or "<li>-</li>"
-                    month_blocks.append(f"<h3>{month}</h3>\n<ul>{lis}</ul>")
-                area_sections.append(f"<h2>{area}</h2>\n{''.join(month_blocks)}")
+        # Merge Upper + Lower Shader
+        merged_cells = found.get("Upper Shader", [])
+        if not merged_cells:
+            merged_cells = found.get("Lower Shader", [])
 
-        sections_html = (
-            "\n".join(area_sections)
-            if area_sections
-            else "<p>No bin collection dates found for Upper/Lower Shader. Try refreshing later.</p>"
-        )
+        if merged_cells:
+            month_blocks = []
+            for month, dates_str in zip(months, merged_cells):
+                dates = [d.strip() for d in dates_str.split(",") if d.strip()]
+                lis = "\n".join(f'<li><i class="fas fa-calendar-day"></i> {d}</li>' for d in dates) or "<li>-</li>"
+                month_blocks.append(f"<h2>{month}</h2>\n<ul>{lis}</ul>")
+            sections_html = f"<h2>Upper and Lower Shader</h2>\n{''.join(month_blocks)}"
+        else:
+            sections_html = "<p>No bin collection dates found for Shader. Try refreshing later.</p>"
 
         html = render_html(TITLE, ICON, H1_COLOR, BODY_BG, CARD_BG, LI_BG, sections_html)
         self._send(200, html)

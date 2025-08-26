@@ -1,5 +1,6 @@
 from http.server import BaseHTTPRequestHandler
-from bs4 import BeautifulSoup
+import os, sys
+sys.path.append(os.path.dirname(__file__))  # ← ensure sibling imports work
 from _shared import fetch_soup, find_row_cells_across_tables, render_html
 
 URL = "https://www.cne-siar.gov.uk/bins-and-recycling/waste-recycling-collections-lewis-and-harris/non-recyclable-waste-grey-bin-purple-sticker/wednesday-collections"

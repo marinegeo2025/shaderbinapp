@@ -1,6 +1,11 @@
 from http.server import BaseHTTPRequestHandler
-from bs4 import BeautifulSoup
-from _shared import fetch_soup, find_row_cells_across_tables, render_html
+
+class handler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header("Content-Type", "text/plain; charset=utf-8")
+        self.end_headers()
+        self.wfile.write(b"pong")
 
 URL = "https://www.cne-siar.gov.uk/bins-and-recycling/waste-recycling-collections-lewis-and-harris/glass-green-bin-collections/friday-collections"
 TITLE = "GREEN Bin Collection Dates for Shader"

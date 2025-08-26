@@ -74,11 +74,15 @@ def render_html(
       background: {body_bg};
       display: flex; justify-content: center; align-items: center;
       min-height: 100vh; margin: 0; padding: 24px;
-    }}
-    .container {{
-      background: {card_bg}; padding: 25px; border-radius: 12px;
+       .container {{
+      background: {card_bg};
+      padding: 25px;
+      border-radius: 12px;
       box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
-      width: 360px; max-width: 100%; text-align: center;
+      width: 90%;          
+      max-width: 600px;    
+      text-align: center;
+      box-sizing: border-box;
     }}
     h1 {{ color: {h1_color}; font-size: 24px; margin-bottom: 20px; }}
     h2 {{ font-size: 18px; color: #444; margin: 14px 0 10px; font-weight: 700; }}
